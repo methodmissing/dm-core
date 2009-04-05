@@ -123,6 +123,7 @@ module DataMapper
       model.instance_variable_set(:@properties,               {})
       model.instance_variable_set(:@paranoid_properties,      {})
       model.instance_variable_set(:@field_naming_conventions, {})
+      model.instance_variable_set(:@callsites,                {})
 
       extra_inclusions.each { |mod| model.send(:include, mod) }
       extra_extensions.each { |mod| model.extend(mod)         }
@@ -140,10 +141,11 @@ module DataMapper
         Model.descendants << target
 
         target.instance_variable_set(:@storage_names,            @storage_names.dup)
-        target.instance_variable_set(:@properties,               {})
+        target.instance_variable_set(:@properties,               {})        
         target.instance_variable_set(:@base_model,               self.base_model)
         target.instance_variable_set(:@paranoid_properties,      @paranoid_properties.dup)
         target.instance_variable_set(:@field_naming_conventions, @field_naming_conventions.dup)
+        target.instance_variable_set(:@callsites,                @callsites.dup)
 
         # TODO: move this into dm-validations
         if respond_to?(:validators)
@@ -191,6 +193,32 @@ module DataMapper
     # @api public
     def storage_names
       @storage_names
+    end
+
+    ##
+    # retrieves or initializes a callsite instance from a given callsite signature
+    #
+    # @param [Numeric]
+    #  A numeric callsite signature
+    #
+    # @return [Callsite]
+    #   A callsite instance associated with the given callsite identifier
+    #
+    # @api public
+    def callsite( signature )
+      @callsite ||= {}
+      @callsite[signature] ||= DataMapper::Callsite.new( self, default_repository_name, signature )     
+    end
+
+    ##
+    # all registered callsites for this resource
+    #
+    # @return [Hash(Numeric => Callsite)]
+    #   All registered callsites for this resource
+    #
+    # @api public
+    def callsites
+      @callsites
     end
 
     ##

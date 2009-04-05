@@ -25,6 +25,15 @@ describe DataMapper::Model do
       @heff1.saved?.should be_true
     end
 
+    it 'should be able to return all registered callsites' do
+      Heffalump.callsites.should == {}
+    end
+
+    it 'should be able to retrieve or initialize a callsite from a given callsite signature' do
+      Heffalump.callsite( 12345 ).class.should == DataMapper::Callsite
+      Heffalump.callsite( 12345 ).fields.should == Set[:num_spots, :striped, :color, :id]
+    end
+
     it 'should be able to get the object' do
       Heffalump.get(1).should == @heff1
     end

@@ -68,6 +68,7 @@ require dir / 'types' / 'paranoid_datetime'     # TODO: move to dm-more
 require dir / 'types' / 'paranoid_boolean'      # TODO: move to dm-more
 require dir / 'types' / 'object'
 require dir / 'types' / 'serial'
+require dir / 'callsite'
 require dir / 'version'
 
 # A logger should always be present. Lets be consistent with DO
