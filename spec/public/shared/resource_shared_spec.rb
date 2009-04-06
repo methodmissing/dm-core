@@ -587,6 +587,7 @@ share_examples_for 'A public Resource' do
     describe 'with a dirty object with a changed key' do
 
       before :all do
+        @original_key = @user.key
         @user.name = 'dkubb'
         @return = @user.save
       end
@@ -596,11 +597,15 @@ share_examples_for 'A public Resource' do
       end
 
       it 'should actually store the changes to persistent storage' do
-        @user.attributes.should == @user.reload.attributes
+        @user.name.should == @user.reload.name
       end
 
       it 'should update the identity map' do
-        @user.repository.identity_map(@model).key?(%w[ dkubb ])
+        @user.repository.identity_map(@model).should have_key(%w[ dkubb ])
+      end
+
+      it 'should remove the old entry from the identity map' do
+        @user.repository.identity_map(@model).should_not have_key(@original_key)
       end
 
     end
@@ -696,8 +701,7 @@ share_examples_for 'A public Resource' do
   end
 
   describe 'invalid resources' do
-
-    before :all do
+    before do
       class ::EmptyObject
         include DataMapper::Resource
       end
@@ -716,6 +720,14 @@ share_examples_for 'A public Resource' do
       lambda { KeylessObject.new }.should raise_error
     end
 
+    after do
+      # clean out invalid models so that global model cleanup
+      # does not throw an exception when working with models
+      # in an invalid state
+      [ EmptyObject, KeylessObject ].each do |model|
+        Object.send(:remove_const, model.name.to_sym)
+        DataMapper::Model.descendants.delete(model)
+      end
+    end
   end
-
 end
