@@ -35,19 +35,19 @@ describe DataMapper::Callsite do
      end
 
      it 'should be able to yield initial fields for the callsite' do
-       @callsite.fields.should == Set[:name, :id, :category_id, :type, :active]
+       @callsite.fields.should == Extlib::SimpleSet.new( [:type, :id] )
      end
 
      it 'should have a hash representation' do
-       @callsite.to_hash.should == { :fields => [:type, :active, :name, :id, :category_id] }
+       @callsite.to_hash.should == { :fields => [:type, :id] }
      end
      
      it 'should be able to optimize a given query instance' do
-       @callsite.optimize( @query ).fields.size.should == 5
+       @callsite.optimize( @query ).fields.size.should == 2
      end
   
      it 'should have a query representation' do
-       @callsite.to_query.fields.map{|f| f.name.to_s }.sort.should == %w(active category_id id name type)
+       @callsite.to_query.fields.map{|f| f.name.to_s }.sort.should == %w(id type)
      end
   
      describe "for a model with an identity field" do

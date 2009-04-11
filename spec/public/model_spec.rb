@@ -31,7 +31,7 @@ describe DataMapper::Model do
 
     it 'should be able to retrieve or initialize a callsite from a given callsite signature' do
       Heffalump.callsite( 12345 ).class.should == DataMapper::Callsite
-      Heffalump.callsite( 12345 ).fields.should == Set[:num_spots, :striped, :color, :id]
+      Heffalump.callsite( 12345 ).fields.should == Extlib::SimpleSet.new( [:id] )
     end
 
     it 'should be able to get the object' do

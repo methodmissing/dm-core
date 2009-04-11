@@ -145,7 +145,7 @@ module DataMapper
     #
     # @api public    
     def to_query
-      DataMapper::Query.new( DataMapper.repository(@repository_name), @model, to_hash )
+      DataMapper::Query.new( DataMapper.repository( @repository_name ), @model, to_hash )
     end  
 
     ##
@@ -173,7 +173,7 @@ module DataMapper
       #
       # @api private
       def init_fields
-        Set.new( @model.properties.defaults.map{|p| p.name } )
+        Extlib::SimpleSet.new( [ identity_field, inheritance_field ].compact )#@model.properties.defaults.map{|p| p.name } )
       end
 
       ##
@@ -184,7 +184,7 @@ module DataMapper
       #
       # @api private  
       def init_links
-        Set.new
+        Extlib::SimpleSet.new
       end
 
       ##
