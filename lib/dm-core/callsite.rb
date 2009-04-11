@@ -163,6 +163,19 @@ module DataMapper
       end
     end  
     
+    ##
+    # Return a human readalbe representation of the callsite
+    #
+    #   TODO: create example
+    #
+    # @return [String]
+    #   human readable representation of the callsite
+    #
+    # @api private 
+    def inspect
+      "#<#{model.name} #{fields.to_a.map{|f| f.inspect }.join(', ')}>"
+    end
+    
     private
 
       ##

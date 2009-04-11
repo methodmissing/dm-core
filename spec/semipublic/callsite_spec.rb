@@ -50,6 +50,10 @@ describe DataMapper::Callsite do
        @callsite.to_query.fields.map{|f| f.name.to_s }.sort.should == %w(id type)
      end
   
+     it 'should have a human readable representation' do
+       @callsite.inspect.should == '#<Product :type, :id>'
+     end
+  
      describe "for a model with an identity field" do
 
        it 'should be able to infer it\'s identity field' do
